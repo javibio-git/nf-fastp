@@ -39,4 +39,4 @@ nextflow run main.nf \
 This version works and run Fastp for all files in the `samplesheet.csv`. **Need to decide if leave the population column since it will create repetitive directories if it is just one sample for each population**
 
 ### 5. Check the output summary
-This version does not generate an output summary. The multiqc module does not work for fastp. **But fastp generates its own report. Also, work is needed in naming the files the right way: `.html` and `.fastq.gz` files.
+This version does not generate an output summary. The multiqc module does not work for fastp. **But fastp generates its own report. Also, work is needed in naming the files the right way: `.html` and `.fastq.gz` files.**

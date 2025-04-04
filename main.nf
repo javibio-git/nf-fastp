@@ -1,5 +1,9 @@
 nextflow.enable.dsl=2
 
+include { fastp; fastp_single } from './modules/fastp.nf'
+include { multiqc } from './modules/multiqc.nf'
+include { generate_summary } from './modules/generate_summary.nf'
+
 workflow {
     samples = Channel.fromPath(params.samplesheet)
         .splitCsv(header: true)
@@ -11,23 +15,22 @@ workflow {
     all_trimmed = trimmed_pe.mix(trimmed_se)
 
     summary_entries = all_trimmed.map { sample_id, species, population, r1, r2 = null, json, html ->
-        def sample_dir = file("results/${species}/${population}/${sample_id}")
-        sample_dir.mkdirs()
+        def sample_dir = "results/${species}/${population}/${sample_id}"
 
-        def r1_out = "${sample_dir}/${r1.name}"
-        def r2_out = r2 ? "${sample_dir}/${r2.name}" : ""
-        def json_out = "${sample_dir}/${json.name}"
-        def html_out = "${sample_dir}/${html.name}"
+        def r1_out = file("${sample_dir}/${r1.getBaseName()}")
+        def r2_out = r2 ? file("${sample_dir}/${r2.getBaseName()}") : ""
+        def json_out = file("${sample_dir}/${json.getBaseName()}")
+        def html_out = file("${sample_dir}/${html.getBaseName()}")
 
-        r1.move(r1_out)
-        if (r2) r2.move(r2_out)
-        json.move(json_out)
-        html.move(html_out)
+        r1.copyTo(r1_out)
+        if (r2) r2.copyTo(r2_out)
+        json.copyTo(json_out)
+        html.copyTo(html_out)
 
         tuple(sample_id, species, population, r1_out, r2_out, json_out, html_out)
     }
 
     generate_summary(summary_entries)
 
-    all_trimmed.map { it[5] } | multiqc
+    // all_trimmed.map { it[5] } | multiqc
 }

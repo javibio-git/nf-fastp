@@ -1,5 +1,8 @@
+params.fastp_container = "quay.io/biocontainers/fastp:0.20.1--h8b12597_0"
+
 process fastp {
     tag "${sample_id}"
+    container params.fastp_container
 
     input:
     tuple val(sample_id), val(species), val(population), path(read1), val(read2)
@@ -23,6 +26,7 @@ process fastp {
 
 process fastp_single {
     tag "${sample_id}"
+    container params.fastp_container
 
     input:
     tuple val(sample_id), val(species), val(population), path(read1), val(read2)

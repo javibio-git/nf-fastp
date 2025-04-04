@@ -34,11 +34,9 @@ S2,mouse,POP2,/absolute/path/S2_R1.fastq.gz,
 nextflow run main.nf \
   --samplesheet samplesheet.csv \
   --outdir /path/to/output/dir \
-  --singularity \
-  -profile slurm
 ```
 ### 4. View the results
-After the pipeline completes, you will find the trimmed FASTQ files organized by species and population in the specified output directory. A MultiQC report will also be generated.
+This version works and run Fastp for all files in the `samplesheet.csv`. **Need to decide if leave the population column since it will create repetitive directories if it is just one sample for each population**
 
 ### 5. Check the output summary
-The output summary CSV file will be located in the output directory and will contain information about the processed samples, including their IDs, species, populations, and paths to the trimmed FASTQ files.
+This version does not generate an output summary. The multiqc module does not work for fastp. **But fastp generates its own report. Also, work is needed in naming the files the right way: `.html` and `.fastq.gz` files.

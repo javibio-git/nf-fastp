@@ -1,4 +1,4 @@
-# nf-fastp-template
+# nf-fastp
 
 A lightweight and flexible Nextflow pipeline for trimming single-end and paired-end FASTQ files using Fastp, with automatic MultiQC report generation and metadata handling via a sample sheet.
 

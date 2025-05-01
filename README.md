@@ -16,7 +16,7 @@ A lightweight and flexible Nextflow pipeline for trimming single-end and paired-
 
 ```bash
 git clone https://github.com/your-username/nf-fastp.git
-cd nf-fastp
+
 ```
 
 ### 2. Create a sample sheet
@@ -24,21 +24,24 @@ cd nf-fastp
 Create a CSV file named `samplesheet.csv` in the root directory of the repository. The sample sheet should contain the following columns:
 
 ```bash
-sample_id,species,population,fastq_1,fastq_2
-S1,human,POP1,/absolute/path/S1_R1.fastq.gz,/absolute/path/S1_R2.fastq.gz
-S2,mouse,POP2,/absolute/path/S2_R1.fastq.gz,
+sample_id,species,fastq_1,fastq_2
+S1,human,/absolute/path/S1_R1.fastq.gz,/absolute/path/S1_R2.fastq.gz
+S2,mouse,/absolute/path/S2_R1.fastq.gz,
 ```
 ### 3. Run the pipeline
 
 ```bash
-nextflow run main.nf \
-	--samplesheet data/samplesheet.csv \
+nextflow run nf-fastp/ \
+	--samplesheet ./samplesheet.csv \
 	--outdir ./results \
-	-resume
+	-profile slurm \
+	-resume \
+	-with-report execution_report.html
 
 ```
 ### 4. View the results
-This version works and run Fastp for all files in the `samplesheet.csv`. **Need to decide if leave the population column since it will create repetitive directories if it is just one sample for each population**
+This version now generates a `MultiQC` report for the `fastp` runs. Consult the `multiqc_report.html` file for `fastp` stats. This file is located in `./results/multiqc/`
 
 ### 5. Check the output summary
-This version does generate a `summary.csv` file but it is not moved to the `results/` directory. The multiqc module does not work for fastp. **But fastp generates its own report. Also, work is needed in naming the files the right way: `.html` and `.fastq.gz` files.**
+Need to fix the `summary.nf` and `merge_summaries.nf` modules to summarize the number of total reads processed for each sample.
+

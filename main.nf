@@ -56,7 +56,12 @@ workflow {
 			null // Emit null if no JSON report is found for a sample
 		}
 	}.filter { it != null } // Filter out the null values
-	.subscribe { println "JSON Report for MultiQC: $it" } // Add this line 
+
+	// Collect all JSON reports into a single list for MultiQC
+	fastp_json.collect().set { all_jsons }
+
+	// Run MultiQC once for all samples
+	multiqc(all_jsons).set { multiqc_report }
 
 	// Run summary (per sample)
 	summary(fastp.out.trimmed) // Assuming my module can handle the list of FASTQ files 
@@ -65,10 +70,6 @@ workflow {
 	// Merge all per-sample summaries into one
 	merge_summaries(summary_files)
 		.set { final_summary }
-
-	// Run MultiQC (after all trimming)
-	multiqc(fastp_json)
-		.set { multiqc_report }
 
 	workflow.onComplete {
 		println "\n========================="

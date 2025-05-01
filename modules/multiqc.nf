@@ -14,7 +14,7 @@
 
         script:
         """
-        # Run MultiQC
-	multiqc "${json_reports.join(' ')}" --outdir .
+        # Run MultiQC on the directory containing the input files
+	multiqc . --outdir .
         """
     }

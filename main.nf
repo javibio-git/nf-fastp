@@ -64,12 +64,10 @@ workflow {
 	multiqc(all_jsons).set { multiqc_report }
 
 	// Run summary (per sample)
-	summary(fastp.out.trimmed) // Assuming my module can handle the list of FASTQ files 
-		.set { summary_files }
+	summary(fastp.out.trimmed).set { summary_files } // Assuming my module can handle the list of FASTQ files 
 
 	// Merge all per-sample summaries into one
-	merge_summaries(summary_files)
-		.set { final_summary }
+	merge_summaries(summary_files).set { final_summary }
 
 	workflow.onComplete {
 		println "\n========================="
@@ -77,7 +75,7 @@ workflow {
 		println "Results organized under 'results/' folder:"
 		println " - Trimmed FASTQ:	results/fastp/"
 		println " - Sample summaries:	results/summary/"
-		println " 	- Merged summary:	results/summary/all_samples/summary.csv"
+		println " - Merged summary:	results/summary/all_samples_summary.csv"
 		println " -MultiQC report: 	results/multiqc/multiqc_report.html"
 		println "=========================\n"
 	}

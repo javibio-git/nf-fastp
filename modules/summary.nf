@@ -2,6 +2,8 @@
 
 process summary {
 	tag "$sample_id"
+	container params.jq_container
+	label 'process_summary'
 	publishDir "results/summary", mode: 'copy'
 
 	input:
@@ -12,11 +14,9 @@ process summary {
 
 	script:
 	"""
-	total_reads=\$(zcat ${fastq_files} | wc -l)
-	total_reads=\$((total_reads / 4))
+	jq -r '[.summary.before_filtering.total_reads] | @csv' ${fastq_files.find { it.name.endsWith('_fastp.json') }} \\
+		| sed 's/^/"$sample_id",/' > ${sample_id}_summary.csv	
 	
-	echo "sample_id,total_reads" > ${sample_id}_summary.csv
-	echo "${sample_id},\$total_reads" >> ${sample_id}_summary.csv
 	"""
 }
  

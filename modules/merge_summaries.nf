@@ -13,21 +13,13 @@ process merge_summaries {
 
 	script:
 	"""
-	
-	# Convert input string to Bash array
-	declare -a files=(${summary_files})
+	# Merge all CSVs, then fix header at the end
+	cat ${summary_files} > merged_unsorted.csv
 
-	# Sort file names and assign first one to header_file
-	sorted_files=(\$(printf '%s\\n' \"\${files[@]}\" | sort))
-	header_file=\${sorted_files[0]}
-
-	echo "Files to merge:" > merge_debug.log
-	printf '%s\\n' \"\${sorted_files[@]}\" >> merge_debug.log
-	head -n 1 \$header_file >> merge_debug.log
-
-	# Merge: keep header from first file, skip header from the rest
-	(head -n 1 \$header_file && tail -n +2 -q \"\${sorted_files[@]}\") \\
-		| sort -t',' -k1,1 > all_samples_summary.csv
+	# Extract header and body separately
+	head -n 1 ${summary_files[0]} > all_samples_summary.csv
+	grep -v -F -x -f all_samples_summary.csv merged_unsorted.csv \\
+		| sort -t',' -k1,1 >> all_samples_summary.csv
 		
 	"""
 }

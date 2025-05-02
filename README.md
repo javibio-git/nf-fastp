@@ -39,8 +39,7 @@ nextflow run nf-fastp/ \
 
 ```
 ### 4. View the results
-This version now generates a `MultiQC` report for the `fastp` runs. Consult the `multiqc_report.html` file for `fastp` stats. This file is located in `./results/multiqc/`
+A `MultiQC` report is generated for the `fastp` runs. Inspect the `multiqc_report.html` file for `fastp` stats. This file is located in `./results/multiqc/`
 
 ### 5. Check the output summary
-Need to fix the `summary.nf` and `merge_summaries.nf` modules to summarize the number of total reads processed for each sample.
-
+Summary files in `csv` format are generated for each sample and a single `all_samples_summary.csv` is also created. These files contain `sample_di` and `total_reads` columns.

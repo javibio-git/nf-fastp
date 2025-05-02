@@ -5,7 +5,7 @@ nextflow.enable.dsl=2
 // PARAMETERS
 params.samplesheet = "./samplesheet.csv"   // Path to the input samplesheet
 params.outdir      = "./results"	   // Base output directory
-params.threads     = 8			   // Number of threads to use for fastp 
+params.threads     = 24			   // Number of threads to use for fastp 
 
 
 // Include subworkflow and processes (must be top-level in DSL2)
@@ -64,10 +64,14 @@ workflow {
 	multiqc(all_jsons).set { multiqc_report }
 
 	// Run summary (per sample)
-	summary(fastp.out.trimmed).set { summary_files } // Assuming my module can handle the list of FASTQ files 
+	def summary_files = fastp.out.trimmed
+		.map { sample_id, files -> tuple(sample_id, files) }
+		| summary
 
-	// Merge all per-sample summaries into one
-	merge_summaries(summary_files).set { final_summary }
+	// Collect all summary CSVs as a list
+	def collected_summaries = summary_files.collect()
+	def final_summary = merge_summaries(collected_summaries)
+
 
 	workflow.onComplete {
 		println "\n========================="

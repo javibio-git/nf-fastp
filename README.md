@@ -5,7 +5,6 @@ A lightweight and flexible Nextflow pipeline for trimming single-end and paired-
 ## Features
 
 - 🧬 Accepts both SE and PE reads
-- 🔗 Organized outputs by species, population, and sample
 - 🚀 Runs with Singularity on SLURM HPC
 - 📊 MultiQC summary report
 - 📝 Output summary CSV for downstream use

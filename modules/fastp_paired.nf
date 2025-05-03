@@ -13,10 +13,17 @@ process fastp_paired {
         script:
         """
         fastp \\
+            -p \\
+            --detect_adapter_for_pe \\
             -i $read1 -I $read2 \\
             -o ${sample_id}_R1_trimmed.fastq.gz \\
             -O ${sample_id}_R2_trimmed.fastq.gz \\
+            --cut_front \\
+            --cut_tail \\
+            --cut_window_size 4 \\
+            --cut_mean_quality 20 \\
             --json ${sample_id}_fastp.json \\
-            -h ${sample_id}_fastp.html
+            --html ${sample_id}_fastp.html \\
+            --thread 24
         """
 }

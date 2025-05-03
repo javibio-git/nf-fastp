@@ -13,9 +13,15 @@ process fastp_single {
         script:
         """
         fastp \\
+            -p
             -i $read1 \\
             -o ${sample_id}_trimmed.fastq.gz \\
+            --cut_front \\
+            --cut_tail \\
+            --cut_window_size 4 \\
+            --cut_mean_quality 20 \\
             --json ${sample_id}_fastp.json \\
-            -h ${sample_id}_fastp.html
+            --html ${sample_id}_fastp.html \\
+            --thread 24
         """
     }

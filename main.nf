@@ -1,10 +1,7 @@
 /// `main.nf` ///
-
 nextflow.enable.dsl=2
 
 // Generate timestamp for reports
-def timestamp = new Date().format("yyyyMMdd_HHmmss")
-def exec_report_dir = "${params.pipeline_info_dir}/pipeline_info/"
 
 // Include subworkflow and processes (must be top-level in DSL2)
 include { fastp           } from './subworkflows/fastp.nf'
@@ -69,7 +66,6 @@ workflow {
 	// Collect all summary CSVs as a list
 	def collected_summaries = summary_files.collect()
 	def final_summary = merge_summaries(collected_summaries)
-
 
 	workflow.onComplete {
 		println "\n========================="

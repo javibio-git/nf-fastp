@@ -34,12 +34,10 @@ nextflow run nf-fastp/ \
 	--samplesheet ./samplesheet.csv \
 	--outdir ./results \
 	-profile slurm \
-	-resume \
-	-with-report execution_report.html
-
+	-resume
 ```
 ### 4. View the results
 A `MultiQC` report is generated for the `fastp` runs. Inspect the `multiqc_report.html` file for `fastp` stats. This file is located in `./results/multiqc/`
 
 ### 5. Check the output summary
-Summary files in `csv` format are generated for each sample and a single `all_samples_summary.csv` is also created. These files contain `sample_di` and `total_reads` columns.
+Summary files in `csv` format are generated for each sample and a single `all_samples_summary.csv` is also created. These files contain `sample_id` and `total_reads` columns.

@@ -13,7 +13,7 @@ process fastp_single {
         script:
         """
         fastp \\
-            -p
+            -p \\
             -i $read1 \\
             -o ${sample_id}_trimmed.fastq.gz \\
             --cut_front \\

@@ -2,11 +2,9 @@
 
 nextflow.enable.dsl=2
 
-// PARAMETERS
-params.samplesheet = "./samplesheet.csv"   // Path to the input samplesheet
-params.outdir      = "./results"	   // Base output directory
-params.threads     = 24			   // Number of threads to use for fastp 
-
+// Generate timestamp for reports
+def timestamp = new Date().format("yyyyMMdd_HHmmss")
+def exec_report_dir = "${params.pipeline_info_dir}/pipeline_info/"
 
 // Include subworkflow and processes (must be top-level in DSL2)
 include { fastp           } from './subworkflows/fastp.nf'
